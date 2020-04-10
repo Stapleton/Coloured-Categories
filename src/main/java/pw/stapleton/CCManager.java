@@ -3,7 +3,7 @@ package pw.stapleton;
 import com.blamejared.crafttweaker.api.CraftTweakerAPI;
 import com.blamejared.crafttweaker.api.actions.IRuntimeAction;
 import com.blamejared.crafttweaker.api.annotations.ZenRegister;
-import com.blamejared.crafttweaker.api.item.IItemStack;
+import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.LogicalSide;
 import org.openzen.zencode.java.ZenCodeType;
 
@@ -15,11 +15,11 @@ import java.util.Map;
 public class CCManager {
 
     @ZenCodeType.Method
-    public static void setMany(IItemStack[] stacks, String background, String borderStart, String borderEnd) {
+    public static void setMany(ItemStack[] stacks, String background, String borderStart, String borderEnd) {
         CraftTweakerAPI.apply(new IRuntimeAction() {
             @Override
             public void apply() {
-                for (IItemStack stack : stacks) {
+                for (ItemStack stack : stacks) {
                     CCManager.setOne(stack, background, borderStart, borderEnd);
                 }
             }
@@ -37,7 +37,7 @@ public class CCManager {
     }
 
     @ZenCodeType.Method
-    public static void setOne(IItemStack stack, String background, String borderStart, String borderEnd) {
+    public static void setOne(ItemStack stack, String background, String borderStart, String borderEnd) {
         Map<String, Long> colors = new HashMap<>();
 
         if (background.length() == 6) background = "0xf0" + background;
@@ -63,12 +63,12 @@ public class CCManager {
                 colors.put("borderStart", Long.decode(b2));
                 colors.put("borderEnd", Long.decode(b3));
 
-                ColoredCategories.ITEM_MAP.put(stack, colors);
+                ColoredCategories.ITEM_MAP.put(stack.getItem(), colors);
             }
 
             @Override
             public String describe() {
-                return stack.getCommandString() + " => Background: " + b1 + " | BorderStart: " + b2 + " | BorderEnd: " + b3;
+                return stack.getItem().getName() + " => Background: " + b1 + " | BorderStart: " + b2 + " | BorderEnd: " + b3;
             }
 
             @Override

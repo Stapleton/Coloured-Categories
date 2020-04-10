@@ -1,6 +1,6 @@
 package pw.stapleton;
 
-import com.blamejared.crafttweaker.api.item.IItemStack;
+import net.minecraft.item.Item;
 import net.minecraftforge.client.event.RenderTooltipEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -11,7 +11,7 @@ import java.util.Map;
 @Mod("coloredcategories")
 public class ColoredCategories {
 
-    public static final Map<IItemStack, Map<String, Long>> ITEM_MAP = new HashMap<>();
+    public static final Map<Item, Map<String, Long>> ITEM_MAP = new HashMap<>();
 
     public ColoredCategories() {}
 
