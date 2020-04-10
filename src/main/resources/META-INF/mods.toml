@@ -1,0 +1,33 @@
+# This is an example mods.toml file. It contains the data relating to the loading mods.
+# There are several mandatory fields (#mandatory), and many more that are optional (#optional).
+# The overall format is standard TOML format, v0.5.0.
+# Note that there are a couple of TOML lists in this file.
+# Find more information on toml format here:  https://github.com/toml-lang/toml
+# The name of the mod loader type to load - for regular FML @Mod mods it should be javafml
+modLoader="javafml" #mandatory
+# A version range to match for said mod loader - for regular FML @Mod it will be the forge version
+loaderVersion="[31,)" #mandatory This is typically bumped every Minecraft version by Forge. See our download page for lists of versions.
+# A list of mods - how many allowed here is determined by the individual mod loader
+[[mods]] #mandatory
+# The modid of the mod
+modId="coloredcategories" #mandatory
+# The version number of the mod - there's a few well known ${} variables useable here or just hardcode it
+version="${file.jarVersion}" #mandatory
+ # A display name for the mod
+displayName="Colored Categories" #mandatory
+# A text field displayed in the mod UI
+credits="Props to Jared for CraftTweaker, CPW and the Forge Team for Forge." #optional
+# A text field displayed in the mod UI
+authors="Stapleton" #optional
+# The description text for the mod (multi line!) (#mandatory)
+description='''
+Color different groups or "Categories" of item tooltips.
+
+ZS Syntax 1: mods.stapleton.CC.set(IItemStack[] stacks, String background, String borderStart, String borderEnd);
+ZS Example 1: mods.stapleton.CC.set([<minecraft:dirt>, <minecraft:stone>, <minecraft:gravel>], "08aace", "db1818", "ffc005");
+ZS Syntax 2: mods.stapleton.CC.set(IItemStack stack, String background, String borderStart, String borderEnd);
+ZS Example 2: mods.stapleton.CC.set(<minecraft:dirt>, "08aace", "db1818", "ffc005");
+Note: All Strings are 8 or 6 characters long. 8 for ARGB Hex or 6 for RGB Hex
+
+JSON or TOML Configuration coming soon.
+'''
