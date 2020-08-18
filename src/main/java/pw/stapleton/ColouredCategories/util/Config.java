@@ -1,9 +1,6 @@
 package pw.stapleton.ColouredCategories.util;
 
 import net.minecraftforge.common.config.Configuration;
-import pw.stapleton.ColouredCategories.ColouredCategories;
-
-import java.awt.Color;
 import java.io.File;
 
 public class Config {
@@ -11,11 +8,11 @@ public class Config {
     public static Configuration config;
 
     // rgb(97, 0, 255)
-    public static long start;
+    public static String borderStart;
     // rgb(97, 0, 255)
-    public static long end;
+    public static String borderEnd;
     // rgb(96, 72, 135)
-    public static long background;
+    public static String background;
 
     public Config(File file) {
 
@@ -26,8 +23,8 @@ public class Config {
 
     private void syncConfigData() {
 
-        start = this.getColour("borderStart", "506100ff", "top");
-        end = this.getColour("borderEnd", "506100ff", "bottom");
+        borderStart = this.getColour("borderStart", "506100ff", "top");
+        borderEnd = this.getColour("borderEnd", "506100ff", "bottom");
         background = this.getColour("background", "f0604887", "background");
 
         if (config.hasChanged()) {
@@ -35,21 +32,7 @@ public class Config {
         }
     }
 
-    private long getColour(String name, String defaultValue, String explain) {
-
-        final String colorValue = "0x" + config.getString(name, Configuration.CATEGORY_GENERAL, defaultValue, "The color for the " + explain + " of the tooltip. This should be 8 characters.");
-
-        try {
-
-            return Long.decode(colorValue);
-        }
-        catch (final Exception e) {
-
-            ColouredCategories.Logger.trace("Could not read colour for " + name + ". Invalid colour: " + colorValue + " Default: " + defaultValue);
-            ColouredCategories.Logger.trace(e);
-        }
-
-        return Color.WHITE.getRGB();
-
+    private String getColour(String name, String defaultValue, String explain) {
+        return "0x" + config.getString(name, Configuration.CATEGORY_GENERAL, defaultValue, "The color for the " + explain + " of the tooltip. This should be 8 characters.");
     }
 }

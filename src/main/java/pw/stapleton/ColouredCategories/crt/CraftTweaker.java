@@ -16,7 +16,21 @@ public class CraftTweaker {
     }
 
     @ZenMethod
-    public static void random(boolean locked) {
-        CraftTweakerAPI.apply(new ActionRandom(locked));
+    public static void colour(IIngredient[] ingredients, String background, String borderStart, String borderEnd) {
+        for (IIngredient ingredient : ingredients) {
+            CraftTweakerAPI.apply(new ActionColour(ingredient, background, borderStart, borderEnd));
+        }
+    }
+
+    @ZenMethod
+    public static void random(IIngredient ingredient, String transparency) {
+        CraftTweakerAPI.apply(new ActionRandom(ingredient, transparency));
+    }
+
+    @ZenMethod
+    public static void random(IIngredient[] ingredients, String transparency) {
+        for (IIngredient ingredient : ingredients) {
+            CraftTweakerAPI.apply(new ActionRandom(ingredient, transparency));
+        }
     }
 }

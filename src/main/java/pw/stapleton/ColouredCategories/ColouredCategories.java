@@ -17,7 +17,7 @@ import java.util.Map;
 @Mod(modid = Reference.MODID, version = Reference.VERSION, clientSideOnly = true, name = Reference.MOD_NAME, dependencies = Reference.DEPENDENCIES)
 public class ColouredCategories {
 
-    public static final Map<String, Map<String, Long>> INGREDIENT_MAP = new HashMap<>();
+    public static final Map<String, Map<String, String>> INGREDIENT_MAP = new HashMap<>();
 
     public static Logger Logger = LogManager.getLogger(Reference.MOD_NAME);
 
@@ -31,22 +31,24 @@ public class ColouredCategories {
         MinecraftForge.EVENT_BUS.register(this);
     }
 
-    @SubscribeEvent(priority = EventPriority.LOWEST)
+    @SubscribeEvent(priority = EventPriority.HIGHEST)
     public void onTooltipColour(RenderTooltipEvent.Color event) {
+        //Logger.info(INGREDIENT_MAP);
 
-        if (INGREDIENT_MAP.containsKey(event.getStack().getDisplayName())) {
-
-            Map<String, Long> values = INGREDIENT_MAP.get(event.getStack().getDisplayName());
-
-            event.setBackground((int) (long) values.get("background"));
-            event.setBorderStart((int) (long) values.get("borderStart"));
-            event.setBorderEnd((int) (long) values.get("borderEnd"));
-
+        if (!INGREDIENT_MAP.containsKey(event.getStack().toString())) {
+            onNullTooltip(event);
         } else {
+            Map<String, String> values = INGREDIENT_MAP.get(event.getStack().toString());
 
-            event.setBackground((int) Config.background);
-            event.setBorderStart((int) Config.start);
-            event.setBorderEnd((int) Config.end);
+            event.setBackground(Long.decode(values.get("background")).intValue());
+            event.setBorderStart(Long.decode(values.get("borderStart")).intValue());
+            event.setBorderEnd(Long.decode(values.get("borderEnd")).intValue());
         }
+    }
+
+    public void onNullTooltip(RenderTooltipEvent.Color event) {
+        event.setBackground(Long.decode(Config.background).intValue());
+        event.setBorderStart(Long.decode(Config.borderStart).intValue());
+        event.setBorderEnd(Long.decode(Config.borderEnd).intValue());
     }
 }
