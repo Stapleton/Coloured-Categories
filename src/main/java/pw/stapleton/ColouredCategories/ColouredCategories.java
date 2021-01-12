@@ -1,5 +1,6 @@
 package pw.stapleton.ColouredCategories;
 
+import net.minecraft.item.Item;
 import net.minecraftforge.client.event.RenderTooltipEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
@@ -17,7 +18,7 @@ import java.util.Map;
 @Mod(modid = Reference.MODID, version = Reference.VERSION, clientSideOnly = true, name = Reference.MOD_NAME, dependencies = Reference.DEPENDENCIES)
 public class ColouredCategories {
 
-    public static final Map<String, Map<String, String>> INGREDIENT_MAP = new HashMap<>();
+    public static final Map<Item, Map<String, String>> INGREDIENT_MAP = new HashMap<>();
 
     public static Logger Logger = LogManager.getLogger(Reference.MOD_NAME);
 
@@ -35,10 +36,10 @@ public class ColouredCategories {
     public void onTooltipColour(RenderTooltipEvent.Color event) {
         //Logger.info(INGREDIENT_MAP);
 
-        if (!INGREDIENT_MAP.containsKey(event.getStack().toString())) {
+        if (!INGREDIENT_MAP.containsKey(event.getStack().getItem())) {
             onNullTooltip(event);
         } else {
-            Map<String, String> values = INGREDIENT_MAP.get(event.getStack().toString());
+            Map<String, String> values = INGREDIENT_MAP.get(event.getStack().getItem());
 
             event.setBackground(Long.decode(values.get("background")).intValue());
             event.setBorderStart(Long.decode(values.get("borderStart")).intValue());

@@ -3,7 +3,11 @@ package pw.stapleton.ColouredCategories.crt;
 import crafttweaker.IAction;
 import crafttweaker.api.item.IIngredient;
 import crafttweaker.api.minecraft.CraftTweakerMC;
+import net.minecraft.inventory.ItemStackHelper;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.Util;
+import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import pw.stapleton.ColouredCategories.ColouredCategories;
 
 import java.util.*;
@@ -11,8 +15,8 @@ import java.util.*;
 public class ActionRandom implements IAction {
 
     private final String[] hexChars = { "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "A", "B", "C", "D", "E", "F" };
-    private ItemStack itemStack;
-    private String transparency;
+    private final ItemStack itemStack;
+    private final String transparency;
 
     public ActionRandom(IIngredient ingredient, String transparency) {
         itemStack = CraftTweakerMC.getItemStack(ingredient);
@@ -47,7 +51,7 @@ public class ActionRandom implements IAction {
         values.put("borderStart", random(this.transparency));
         values.put("borderEnd", random(this.transparency));
 
-        ColouredCategories.INGREDIENT_MAP.put(itemStack.toString(), values);
+        ColouredCategories.INGREDIENT_MAP.put(itemStack.getItem(), values);
     }
 
     @Override

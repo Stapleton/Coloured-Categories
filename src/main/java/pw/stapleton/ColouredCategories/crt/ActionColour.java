@@ -11,10 +11,10 @@ import java.util.Map;
 
 public class ActionColour implements IAction {
 
-    private ItemStack itemStack;
-    private String bg;
-    private String bs;
-    private String be;
+    private final ItemStack itemStack;
+    private final String bg;
+    private final String bs;
+    private final String be;
 
     public ActionColour(IIngredient ingredients, String background, String borderStart, String borderEnd) {
         this.itemStack = CraftTweakerMC.getItemStack(ingredients);
@@ -40,7 +40,7 @@ public class ActionColour implements IAction {
         values.put("borderStart", this.bs);
         values.put("borderEnd", this.be);
 
-        ColouredCategories.INGREDIENT_MAP.put(itemStack.toString(), values);
+        ColouredCategories.INGREDIENT_MAP.put(itemStack.getItem(), values);
     }
 
     @Override
