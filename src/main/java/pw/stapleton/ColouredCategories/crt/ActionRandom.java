@@ -1,62 +1,35 @@
-package pw.stapleton.ColouredCategories.crt;
+package pw.stapleton.colouredcategories.crt;
 
-import crafttweaker.IAction;
-import crafttweaker.api.item.IIngredient;
-import crafttweaker.api.minecraft.CraftTweakerMC;
-import net.minecraft.inventory.ItemStackHelper;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.Util;
-import net.minecraftforge.event.entity.player.ItemTooltipEvent;
-import pw.stapleton.ColouredCategories.ColouredCategories;
+import com.blamejared.crafttweaker.api.action.base.IAction;
+import com.blamejared.crafttweaker.api.ingredient.IIngredient;
+import net.minecraft.world.item.Item;
+import pw.stapleton.colouredcategories.ColouredCategories;
 
 import java.util.*;
 
 public class ActionRandom implements IAction {
+    private final Item item;
 
-    private final String[] hexChars = { "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "A", "B", "C", "D", "E", "F" };
-    private final ItemStack itemStack;
-    private final String transparency;
-
-    public ActionRandom(IIngredient ingredient, String transparency) {
-        itemStack = CraftTweakerMC.getItemStack(ingredient);
-        this.transparency = transparency;
+    public ActionRandom(IIngredient ingredient) {
+        item = ingredient.asVanillaIngredient().getItems()[0].getItem();
     }
 
-    public String random(String transparency) {
-
-        StringBuilder hexBuild = new StringBuilder("0x");
-        Random ran = new Random();
-
-        int loop = 8;
-
-        if (!transparency.isEmpty()) {
-            hexBuild.append(transparency);
-            loop = 6;
-        }
-
-        for (int i = 0; i < loop; i++) {
-            int ranI = ran.nextInt(hexChars.length);
-            hexBuild.append(hexChars[ranI]);
-        }
-
-        return hexBuild.toString();
-    }
 
     @Override
     public void apply() {
         Map<String, String> values = new HashMap<>();
 
-        values.put("background", random(this.transparency));
-        values.put("borderStart", random(this.transparency));
-        values.put("borderEnd", random(this.transparency));
+        values.put("backStart", ColouredCategories.RANDOM_HEX_COLOUR.get());
+        values.put("backEnd", ColouredCategories.RANDOM_HEX_COLOUR.get());
+        values.put("bordStart", ColouredCategories.RANDOM_HEX_COLOUR.get());
+        values.put("bordEnd", ColouredCategories.RANDOM_HEX_COLOUR.get());
 
-        ColouredCategories.INGREDIENT_MAP.put(itemStack.getItem(), values);
+        ColouredCategories.ITEM_MAP.put(item, values);
     }
 
     @Override
     public String describe() {
 
-        return "Coloured Categories randomly coloured the tooltip of " + itemStack.toString();
+        return "Coloured Categories randomly coloured the tooltip of " + item.toString();
     }
 }

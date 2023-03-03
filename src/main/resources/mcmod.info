@@ -9,7 +9,7 @@
   "updateUrl": "",
   "authorList": ["Stapleton"],
   "credits": "",
-  "logoFile": "",
+  "logoFile": "logo.png",
   "screenshots": [],
   "dependencies": []
 }
