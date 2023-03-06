@@ -13,6 +13,7 @@ public class Config {
     public static ForgeConfigSpec.BooleanValue RANDOM_BACKGROUND_END;
     public static ForgeConfigSpec.BooleanValue RANDOM_BORDER_START;
     public static ForgeConfigSpec.BooleanValue RANDOM_BORDER_END;
+    public static ForgeConfigSpec.BooleanValue CONTROL_DEFAULT_COLOURS;
     public static ForgeConfigSpec.ConfigValue<List<? extends String>> COLOUR_CATEGORIES;
 
     static {
@@ -43,8 +44,10 @@ public class Config {
     private static void setupColourConfig(ForgeConfigSpec.Builder configBuilder) {
         configBuilder.comment(" Colour Settings");
         configBuilder.push("colours");
-        configBuilder.comment(" Define your Coloured Categories here! Theres a format to follow, and an example below!\n Format: BackgroundStart,BackgroundEnd,BorderStart,BorderEnd|ItemStack or ItemStack,ItemStack,...\n You can use either RGB or ARGB hex codes. Use '0x' instead of the '#' on the hexcode.");
-        COLOUR_CATEGORIES = configBuilder.defineList("categories", Arrays.asList("0xf08A7568,0xf08A7568,0xf03F352F,0xf03F352F|minecraft:wheat_seeds,minecraft:dirt", "0xf0F50D00,0xf0FA5E0D,0xf0DE0B50,0xf0FA0DD2|minecraft:sand,minecraft:oak_sapling"), entry -> true);
+        configBuilder.comment("\n Change whether Coloured Categories should provide the default tooltip colours, or if it should back off if no colour is defined for the item.\n Set to false if you have other mods changing the tooltip.");
+        CONTROL_DEFAULT_COLOURS = configBuilder.define("control_default_colours", true);
+        configBuilder.comment("\n Define your Coloured Categories here! Theres a format to follow, and an example below!\n Format: BackgroundStart,BackgroundEnd,BorderStart,BorderEnd|ItemStack or ItemStack,ItemStack,...\n You can use either RGB or ARGB hex codes. Having a # or 0x at the start isn't necessary.");
+        COLOUR_CATEGORIES = configBuilder.defineList("categories", Arrays.asList("f08A7568,f08A7568,f03F352F,f03F352F|minecraft:wheat_seeds,minecraft:dirt", "f0F50D00,f0FA5E0D,f0DE0B50,f0FA0DD2|minecraft:sand,minecraft:oak_sapling"), entry -> true);
         configBuilder.pop();
     }
 }

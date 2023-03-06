@@ -8,6 +8,7 @@ import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
+import net.minecraftforge.fml.event.config.ModConfigEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -24,14 +25,10 @@ import java.util.regex.Pattern;
 @Mod(Reference.MODID)
 public class ColouredCategories {
 
-    public static final LinkedHashMap<Item, Map<String, String>> ITEM_MAP = new LinkedHashMap<>(1000);
+    public static final LinkedHashMap<Item, Map<String, String>> ITEM_MAP = new LinkedHashMap<>(100);
     public static final RandomHexColour RANDOM_HEX_COLOUR = new RandomHexColour();
     public static Logger Logger = LogManager.getLogger(Reference.MOD_NAME);
     public static ColouredCategories INSTANCE;
-    public static ColouredCategories instance() {
-        return ColouredCategories.INSTANCE;
-    }
-
 
     public ColouredCategories() {
         IEventBus ModEventBus = FMLJavaModLoadingContext.get().getModEventBus();
@@ -40,10 +37,19 @@ public class ColouredCategories {
 
         ModEventBus.register(this);
         ModEventBus.addListener(this::processConfig);
+        ModEventBus.addListener(this::reloadConfig);
     }
 
+    public void reloadConfig(ModConfigEvent.Reloading event) {
+        ITEM_MAP.clear();
+        loadConfig();
+    }
 
-    private void processConfig(FMLCommonSetupEvent event) {
+    public void processConfig(FMLCommonSetupEvent event) {
+        loadConfig();
+    }
+
+    private void loadConfig() {
         for (String category : Config.COLOUR_CATEGORIES.get()) {
             ForgeConfigSpec.BooleanValue randomAll = Config.RANDOM_ALL;
 
@@ -71,8 +77,8 @@ public class ColouredCategories {
                 items.add(new ItemStack(ForgeRegistries.ITEMS.getValue(new ResourceLocation(stack))).getItem());
             } catch (Error e) {
                 Logger.error("Malformed itemids in one of your coloured categories." +
-                        "\n\nHeres the category from the config: \n'" + category + "'" +
-                        "\n\nAs well as the error thrown: " + e);
+                        "\nHeres the category from the config: '" + category + "'" +
+                        "\nAs well as the error thrown: " + e);
             }
         }
 
@@ -90,17 +96,20 @@ public class ColouredCategories {
 
         for (Map.Entry<String, String> code : codes.entrySet()) {
             String k = code.getKey();
-            String v = code.getValue();
+            String v = code.getValue().toLowerCase();
 
-            if (v.length() == 10) continue;
-            if (v.length() == 8){
-                codes.put(k, v.replace("0x", "0xf0"));
+            if (v.startsWith("#")) v = v.replace("#", "");
+            if (v.startsWith("0x")) v = v.replace("0x", "");
+
+            if (v.length() == 8) continue;
+            if (v.length() == 6){
+                codes.put(k, "cc"+v);
                 continue;
             }
-            Logger.error("Invalid hexcode in one of your coloured categories. " +
-                    "Setting " + v + " to bright red. " +
-                    "Invalid Category: '" + category + "'");
-            codes.put(k, "0xF0FF0000");
+            Logger.error("Invalid hexcode in one of your coloured categories. Setting hexcode to 'ff0000' (BrightRed)" +
+                    "\nInvalid Category: '" + category + "'" +
+                    "\nInvalid Rule: '" + k + ": " + v);
+            codes.put(k, "ccff0000");
         }
 
         return codes;

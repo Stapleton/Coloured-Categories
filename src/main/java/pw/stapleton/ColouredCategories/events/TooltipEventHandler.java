@@ -12,14 +12,37 @@ import java.util.Map;
 
 public class TooltipEventHandler {
 
-    @SubscribeEvent(priority = EventPriority.HIGH)
+    private Map<String, String> controlDefaultColours(RenderTooltipEvent.Color event) {
+        if (Config.CONTROL_DEFAULT_COLOURS.get()) {
+            try {
+                return ColouredCategories.ITEM_MAP.values().iterator().next();
+            } catch (Error e) {
+                ColouredCategories.Logger.error(e);
+                return getOriginals(event);
+            }
+        }
+
+        return getOriginals(event);
+    }
+
+    private Map<String, String> getOriginals(RenderTooltipEvent.Color event) {
+        Map<String, String> codes = new HashMap<>();
+        codes.put("backStart", Integer.toHexString(event.getOriginalBackgroundStart()));
+        codes.put("backEnd", Integer.toHexString(event.getOriginalBackgroundEnd()));
+        codes.put("bordStart", Integer.toHexString(event.getOriginalBorderStart()));
+        codes.put("bordEnd", Integer.toHexString(event.getOriginalBorderEnd()));
+        return codes;
+    }
+
+    @SubscribeEvent(priority = EventPriority.NORMAL)
     public void onTooltipColor(RenderTooltipEvent.Color event) {
         Item i = event.getItemStack().getItem();
 
         // itemMapHexCodes is sourced from ITEM_MAP if the item exists already
-        // if the item doesnt exist in ITEM_MAP then fallback to the first item in the list
-        // Default config makes it so there is always at least 1 entry, but should prolly have an extra default just in case
-        Map<String, String> itemMapHexCodes = ColouredCategories.ITEM_MAP.containsKey(i) ? ColouredCategories.ITEM_MAP.get(i) : ColouredCategories.ITEM_MAP.values().iterator().next();
+        // if the item doesn't exist in ITEM_MAP then check the config if we want to even set a default colour
+        // if CONTROL_DEFAULT_COLOUR is true, return first item in ITEM_MAP, if no first item, return original colours
+        // if CONTROL_DEFAULT_COLOUR is false, return original colours. clearly there are possibly conflicting mods
+        Map<String, String> itemMapHexCodes = ColouredCategories.ITEM_MAP.containsKey(i) ? ColouredCategories.ITEM_MAP.get(i) : controlDefaultColours(event);
         Map<String, String> configModifiedHexCodes = new HashMap<>();
 
         if (Config.RANDOM_ALL.get()) {
@@ -36,9 +59,9 @@ public class TooltipEventHandler {
     }
 
     public void colorTooltip(RenderTooltipEvent.Color event, Map<String, String> m) {
-        event.setBackgroundStart(Long.decode(m.get("backStart")).intValue());
-        event.setBackgroundEnd(Long.decode(m.get("backEnd")).intValue());
-        event.setBorderStart(Long.decode(m.get("bordStart")).intValue());
-        event.setBorderEnd(Long.decode(m.get("bordEnd")).intValue());
+        event.setBackgroundStart((int) Long.parseLong(m.get("backStart"), 16));
+        event.setBackgroundEnd((int) Long.parseLong(m.get("backEnd"), 16));
+        event.setBorderStart((int) Long.parseLong(m.get("bordStart"), 16));
+        event.setBorderEnd((int) Long.parseLong(m.get("bordEnd"), 16));
     }
 }
