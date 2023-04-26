@@ -25,11 +25,7 @@ import java.util.regex.Pattern;
 @Mod(Reference.MODID)
 public class ColouredCategories {
 
-<<<<<<< HEAD:src/main/java/pw/stapleton/ColouredCategories/ColouredCategories.java
-    public static final LinkedHashMap<Item, Map<String, String>> ITEM_MAP = new LinkedHashMap<>(100);
-=======
     public static final Map<Item, Map<String, String>> ITEM_MAP = new HashMap<>();
->>>>>>> 1.18.x:src/main/java/pw/stapleton/cc/ColouredCategories.java
     public static final RandomHexColour RANDOM_HEX_COLOUR = new RandomHexColour();
     public static Logger Logger = LogManager.getLogger(Reference.MOD_NAME);
     public static ColouredCategories INSTANCE;
@@ -80,53 +76,16 @@ public class ColouredCategories {
             try {
                 items.add(new ItemStack(ForgeRegistries.ITEMS.getValue(new ResourceLocation(category))).getItem());
             } catch (Error e) {
-<<<<<<< HEAD:src/main/java/pw/stapleton/ColouredCategories/ColouredCategories.java
-                Logger.error("Malformed itemids in one of your coloured categories." +
-                        "\nHeres the category from the config: '" + category + "'" +
-                        "\nAs well as the error thrown: " + e);
-=======
                 Logger.error("Malformed Item IDs in one of your coloured categories." +
                         "\nInvalid Category: '" + category + "'");
->>>>>>> 1.18.x:src/main/java/pw/stapleton/cc/ColouredCategories.java
             }
         }
 
         return items;
     }
 
-<<<<<<< HEAD:src/main/java/pw/stapleton/ColouredCategories/ColouredCategories.java
-    private Map<String, String> parseHexCodes(String codeString, String category) {
-        String[] codeStrings = codeString.split(",");
-        Map<String, String> codes = new HashMap<>();
-
-        codes.put("backStart", codeStrings[0]);
-        codes.put("backEnd", codeStrings[1]);
-        codes.put("bordStart", codeStrings[2]);
-        codes.put("bordEnd", codeStrings[3]);
-
-        for (Map.Entry<String, String> code : codes.entrySet()) {
-            String k = code.getKey();
-            String v = code.getValue().toLowerCase();
-
-            if (v.startsWith("#")) v = v.replace("#", "");
-            if (v.startsWith("0x")) v = v.replace("0x", "");
-
-            if (v.length() == 8) continue;
-            if (v.length() == 6){
-                codes.put(k, "cc"+v);
-                continue;
-            }
-            Logger.error("Invalid hexcode in one of your coloured categories. Setting hexcode to 'ff0000' (BrightRed)" +
-                    "\nInvalid Category: '" + category + "'" +
-                    "\nInvalid Rule: '" + k + ": " + v);
-            codes.put(k, "ccff0000");
-        }
-
-        return codes;
-=======
     private Map<String, String> parseColourway(String rawColourway) {
         String[] parsedColourway = rawColourway.split(",");
         return new Colourway(parsedColourway[0], parsedColourway[1], parsedColourway[2], parsedColourway[3]).get();
->>>>>>> 1.18.x:src/main/java/pw/stapleton/cc/ColouredCategories.java
     }
 }

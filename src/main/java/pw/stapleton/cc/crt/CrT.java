@@ -5,8 +5,6 @@ import com.blamejared.crafttweaker.api.annotation.ZenRegister;
 import com.blamejared.crafttweaker.api.ingredient.IIngredient;
 import org.openzen.zencode.java.ZenCodeType;
 
-import java.util.Map;
-
 @ZenRegister
 @ZenCodeType.Name("mods.cc.CrT")
 public class CrT {
