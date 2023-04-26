@@ -1,4 +1,4 @@
-package pw.stapleton.colouredcategories.util;
+package pw.stapleton.cc.util;
 
 import net.minecraftforge.common.ForgeConfigSpec;
 

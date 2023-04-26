@@ -4,7 +4,7 @@ plugins {
     id 'net.minecraftforge.gradle' version '5.1.+'
 }
 
-version = '1.1'
+version = "${mc_version}-${mod_version}"
 group = 'pw.stapleton.colouredcategories' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = 'colouredcategories'
 
@@ -26,7 +26,7 @@ minecraft {
     //
     // Use non-default mappings at your own risk. They may not always work.
     // Simply re-run your setup task after changing the mappings to update your workspace.
-    mappings channel: 'official', version: '1.19.2'
+    mappings channel: 'official', version: "${mc_version}"
 
     // accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg') // Currently, this location cannot be changed from the default.
 
@@ -54,6 +54,8 @@ minecraft {
 
             // Comma-separated list of namespaces to load gametests from. Empty = all namespaces.
             property 'forge.enabledGameTestNamespaces', 'colouredcategories'
+            property 'mixin.env.remapRefMap', 'true'
+            property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
 
             mods {
                 colouredcategories {
@@ -70,6 +72,8 @@ minecraft {
             property 'forge.logging.console.level', 'debug'
 
             property 'forge.enabledGameTestNamespaces', 'colouredcategories'
+            property 'mixin.env.remapRefMap', 'true'
+            property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
 
             mods {
                 colouredcategories {
@@ -89,6 +93,8 @@ minecraft {
             property 'forge.logging.console.level', 'debug'
 
             property 'forge.enabledGameTestNamespaces', 'colouredcategories'
+            property 'mixin.env.remapRefMap', 'true'
+            property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
 
             mods {
                 colouredcategories {
@@ -103,6 +109,8 @@ minecraft {
             property 'forge.logging.markers', 'REGISTRIES'
 
             property 'forge.logging.console.level', 'debug'
+            property 'mixin.env.remapRefMap', 'true'
+            property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
 
             // Specify the modid for data generation, where to output the resulting resource, and where to look for existing resources.
             args '--mod', 'colouredcategories', '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
@@ -122,8 +130,24 @@ sourceSets.main.resources { srcDir 'src/generated/resources' }
 repositories {
     maven {
         url = 'https://maven.blamejared.com'
-        name = 'BlameJared Maven'
     }
+
+    maven {
+        // Shedaniel's maven (Architectury API)
+        url = "https://maven.architectury.dev"
+        content {
+            includeGroup "dev.architectury"
+        }
+    }
+
+    maven {
+        // saps.dev Maven (KubeJS and Rhino)
+        url = "https://maven.saps.dev/minecraft"
+        content {
+            includeGroup "dev.latvian.mods"
+        }
+    }
+
     // Put repositories for dependencies here
     // ForgeGradle automatically adds the Forge maven and Maven Central for you
 
@@ -137,9 +161,13 @@ dependencies {
     // Specify the version of Minecraft to use. If this is any group other than 'net.minecraft', it is assumed
     // that the dep is a ForgeGradle 'patcher' dependency, and its patches will be applied.
     // The userdev artifact is a special name and will get all sorts of transformations applied to it.
-    minecraft 'net.minecraftforge:forge:1.19.2-43.2.0'
-    compileOnly fg.deobf('com.blamejared.crafttweaker:CraftTweaker-forge-1.19.2:10.1.32')
-    //runtimeOnly fg.deobf('com.blamejared.crafttweaker:CraftTweaker-forge-1.19.2:10.1.32')
+    minecraft "net.minecraftforge:forge:${mc_version}-${forge_version}"
+    compileOnly fg.deobf("com.blamejared.crafttweaker:CraftTweaker-forge-${mc_version}:${crafttweaker_version}")
+    compileOnly fg.deobf("dev.latvian.mods:kubejs-forge:${kubejs_version}")
+
+    // these two are unfortunately needed since fg.deobf doesn't respect transitive dependencies yet
+    compileOnly fg.deobf("dev.latvian.mods:rhino-forge:${rhino_version}")
+    compileOnly fg.deobf("dev.architectury:architectury-forge:${architectury_version}")
 
     // Real mod deobf dependency examples - these get remapped to your current mappings
     // compileOnly fg.deobf("mezz.jei:jei-${mc_version}:${jei_version}:api") // Adds JEI API as a compile dependency
@@ -160,7 +188,7 @@ jar {
         attributes([
                 "Specification-Title"     : "Coloured Categories",
                 "Specification-Vendor"    : "Stapleton",
-                "Specification-Version"   : "1.0", // We are version 1 of ourselves
+                "Specification-Version"   : "1", // We are version 1 of ourselves
                 "Implementation-Title"    : project.name,
                 "Implementation-Version"  : project.jar.archiveVersion,
                 "Implementation-Vendor"   : "Stapleton",

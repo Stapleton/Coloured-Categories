@@ -1,6 +1,7 @@
-package pw.stapleton.colouredcategories.handler;
+package pw.stapleton.cc.util;
 
-import java.util.HashMap;
+import pw.stapleton.cc.colour.Colourway;
+
 import java.util.Map;
 import java.util.Random;
 
@@ -16,14 +17,7 @@ public class RandomHexColour {
     }
 
     public Map<String, String> randomAll() {
-        Map<String, String> codes = new HashMap<>();
-
-        codes.put("backStart", this.get());
-        codes.put("backEnd", this.get());
-        codes.put("bordStart", this.get());
-        codes.put("bordEnd", this.get());
-
-        return codes;
+        return new Colourway(this.get(), this.get(), this.get(), this.get()).get();
     }
 
     public String get() {
