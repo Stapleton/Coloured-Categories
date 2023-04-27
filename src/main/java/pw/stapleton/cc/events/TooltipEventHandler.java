@@ -43,9 +43,9 @@ public class TooltipEventHandler {
         Map<String, String> itemMapHexCodes = Forge.getCategories().containsKey(i) ? Forge.getCategories().get(i) : controlDefaultColours(event);
 
         if (Config.RANDOM_ALL.get()) {
-            Forge.add(i, Forge.randomColourway());
+            Forge.getCategories().putIfAbsent(i, Forge.randomColourway());
         } else {
-            Forge.add(i, new Colourway(
+            Forge.getCategories().putIfAbsent(i, new Colourway(
                     Config.RANDOM_BACKGROUND_START.get() ? Forge.randomHexColour() : itemMapHexCodes.get("backStart"),
                     Config.RANDOM_BACKGROUND_END.get() ? Forge.randomHexColour() : itemMapHexCodes.get("backEnd"),
                     Config.RANDOM_BORDER_START.get() ? Forge.randomHexColour() : itemMapHexCodes.get("bordStart"),
